@@ -163,7 +163,7 @@ html2canvas.Preload = function(element, opts){
 
             background_image = html2canvas.Util.getCSS(el, 'backgroundImage');
 
-            if ( background_image && background_image !== "1" && background_image !== "none" ) {	
+            if ( background_image && background_image !== "1" && background_image !== "none" ) {
 
                 // TODO add multi image background support
 
@@ -179,9 +179,9 @@ html2canvas.Preload = function(element, opts){
 
                     }
 
-                } else {	
-                    src = html2canvas.Util.backgroundImage(background_image.match(/data:image\/.*;base64,/i) ? background_image : background_image.split(",")[0]);		
-                    methods.loadImage(src); 		
+                } else {
+                    src = html2canvas.Util.backgroundImage(background_image.match(/data:image\/.*;base64,/i) ? background_image : background_image.split(",")[0]);
+                    methods.loadImage(src);
                 }
 
             /*
@@ -218,7 +218,7 @@ html2canvas.Preload = function(element, opts){
                         imagesLoaded+=1;
                         start();
 
-                    };	
+                    };
 
                     img.onerror = function() {
                         images.splice( getIndex( images, img.src ), 2 );
