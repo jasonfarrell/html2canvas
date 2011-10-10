@@ -33,7 +33,7 @@ html2canvas.Util.Bounds = function getBounds (el) {
     var clientRect,
     bounds = {};
 
-    if (el.getBoundingClientRect){	
+    if (el.getBoundingClientRect){
         clientRect = el.getBoundingClientRect();
 
 
@@ -63,19 +63,62 @@ html2canvas.Util.Bounds = function getBounds (el) {
 }
 
 html2canvas.Util.getCSS = function (el, attribute) {
-    // return jQuery(el).css(attribute);
-    /*
-    var val,
-    left,
-    rsLeft = el.runtimeStyle && el.runtimeStyle[ attribute ],
-    style = el.style;
+    if (el.style[attribute]) {
+        // If the property exists in style[], then it's been set
+        // recently (and is current)
+        return el.style[attribute];
+    } else if (el.currentStyle) {
+        // Otherwise, try to use IE's method
+        return el.currentStyle[attribute];
+    } else if ( document.defaultView && document.defaultView.getComputedStyle) {
+        // It uses the traditional 'text-align' style of rule writing,
+        // instead of textAlign
+        attribute = attribute.replace(/([A-Z])/g,"-$1");
+        attribute = attribute.toLowerCase();
 
-    if ( el.currentStyle ) {
-        val = el.currentStyle[ attribute ];
-    } else if (window.getComputedStyle) {
-        val = document.defaultView.getComputedStyle(el, null)[ attribute ];
+        // Get the style object and get the value of the property (if it exists)
+        var s = document.defaultView.getComputedStyle(el,"");
+        return s && s.getPropertyValue(attribute);
+    } else {
+        // Otherwise we're using some other browser
+        return null;
     }
-    */
+};
+
+html2canvas.Util.Extend = function (options, defaults) {
+    var key;
+    for (key in options) {
+        if (options.hasOwnProperty(key)) {
+            defaults[key] = options[key];
+        }
+    }
+    return defaults;
+};
+
+html2canvas.Util.index = function(el) {
+  var nodes = el.parentNode.childNodes,
+      node,
+      i = 0,
+      count = 0;
+  while( (node=nodes.item(i++)) && node!=el ) {
+    if( node.nodeType==1 ) {
+      count++;
+    }
+  }
+  return count;
+};
+
+html2canvas.Util.Children = function(el) {
+    if ( el.nodeName && 'iframe' === el.nodeName.toLowerCase() ) {
+      var re = new RegExp(':\/\/'+document.domain);
+      if ( re.test(el.src) ) {
+        return el.contentDocument || el.contentWindow.document;
+      } else {
+        return [];
+      }
+    } else {
+      return el.childNodes || [];
+    }
     // Check if we are not dealing with pixels, (Opera has issues with this)
     // Ported from jQuery css.js
     // From the awesome hack by Dean Edwards
@@ -101,24 +144,4 @@ html2canvas.Util.getCSS = function (el, attribute) {
         if ( rsLeft ) {
             el.runtimeStyle.left = rsLeft;
         }*/
-    val = $(el).css(attribute);
-    // }
-    return val;
-
-
 };
-
-html2canvas.Util.Extend = function (options, defaults) {
-    var key;
-    for (key in options) {
-        if (options.hasOwnProperty(key)) {
-            defaults[key] = options[key];
-        }
-    }
-    return defaults;
-};
-
-html2canvas.Util.Children = function(el) {
-    // $(el).contents() !== el.childNodes, Opera / IE have issues with that
-    return $(el).contents();
-}

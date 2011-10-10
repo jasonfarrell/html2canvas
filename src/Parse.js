@@ -429,7 +429,7 @@ html2canvas.Parse = function (element, images, opts) {
         if (/^(decimal|decimal-leading-zero|upper-alpha|upper-latin|upper-roman|lower-alpha|lower-greek|lower-latin|lower-roman)$/i.test(type)) {
 
             // TODO remove jQuery dependency
-            currentIndex = $(element).index()+1;
+            currentIndex = html2canvas.Util.index(element)+1;
 
             switch(type){
                 case "decimal":
@@ -443,7 +443,6 @@ html2canvas.Parse = function (element, images, opts) {
                     }
                     break;
                 case "upper-roman":
-                    text = html2canvas.Generate.ListRoman( currentIndex );
                     break;
                 case "lower-roman":
                     text = html2canvas.Generate.ListRoman( currentIndex ).toLowerCase();
