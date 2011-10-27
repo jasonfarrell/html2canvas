@@ -221,7 +221,7 @@ html2canvas.Preload = function(element, opts){
                     };
 
                     img.onerror = function() {
-                        images.splice( getIndex( images, img.src ), 2 );
+                        images.splice( getIndex( images, src ), 2 );
                         start();
                     };
 
